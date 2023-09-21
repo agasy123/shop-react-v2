@@ -19,7 +19,7 @@ const localStorage=require("localStorage")
 var con = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
-  password: "",
+  password: "tXrJRlp0J2bylo5ISOyQ",
   database: "node_project",
 });
 
