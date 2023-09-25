@@ -13,8 +13,8 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const socketIOSession = require("socket.io-express-session");
-const sessionStorage=require("sessionstorage")
-const localStorage=require("localStorage")
+const sessionStorage = require("sessionstorage");
+const localStorage = require("localStorage");
 
 var con = mysql.createConnection({
   host: "127.0.0.1",
@@ -32,38 +32,39 @@ con.connect((err) => {
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "1mb" }));
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // react app location
+//     credentials: true,
+//   })
+// );
 app.use(
-  cors({
-    origin: "http://localhost:3000", // react app location
-    credentials: true,
+  session({
+    resave: true,
+    saveUninitialized: true,
+    secret: "secret",
   })
 );
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: "secret",
-}));
 app.use(cookieParser("your-secret-key"));
-
-
 
 // Routes
 app.get("/data", (req, res) => {
   var con = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
-    password: "root",
-    database: "node_project",
+    password: "PfN8KqAUtrdzuIAHBgBn",
+    port: "3306",
+    database: "agasy",
   });
   con.query("SELECT * FROM products", (err, result) => {
     res.send(result);
   });
 });
 
-app.get("/get_cart_items",(req,res)=>{
+app.get("/get_cart_items", (req, res) => {
   console.log(localStorage.cart);
-  res.send(localStorage.cart)
-})
+  res.send(localStorage.cart);
+});
 
 app.post("/new_item", (req, res) => {
   const name = req.body.name;
@@ -95,10 +96,11 @@ app.post("/new_item", (req, res) => {
     type
   );
   var con = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
-    password: "root",
-    database: "node_project",
+    password: "PfN8KqAUtrdzuIAHBgBn",
+    port: "3306",
+    database: "agasy",գի
   });
   var query =
     "INSERT INTO products (name, description, image, chipset, display_size, camera, storage, memory, price, sale_price, quantity, category, type) VALUES ?";
@@ -147,19 +149,19 @@ app.post("/update", (req, res) => {
 });
 
 // Access the session as req.session
-app.post('/add_item_to_cart', function(req, res) {
+app.post("/add_item_to_cart", function (req, res) {
   // sessionStorage.setItem('cart', JSON.stringify(req.body))
   // console.log(sessionStorage.getItem('cart'));
   if (localStorage.cart) {
     // console.log(sessionStorage.cart);
-    localStorage.cart.push(JSON.stringify(req.body))
+    localStorage.cart.push(JSON.stringify(req.body));
   } else {
-    localStorage.cart=[JSON.stringify(req.body)]
+    localStorage.cart = [JSON.stringify(req.body)];
     // console.log(sessionStorage.cart);
   }
   console.log(localStorage.cart);
-  res.end("req.session.cart")
-})
+  res.end("req.session.cart");
+});
 
 // Server Start
 server.listen(5000, () => {
