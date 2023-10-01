@@ -17,11 +17,11 @@ const sessionStorage = require("sessionstorage");
 const localStorage = require("localStorage");
 
 var con = mysql.createConnection({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
-  password: "PfN8KqAUtrdzuIAHBgBn",
+  password: "root",
   port: "3306",
-  database: "agasy",
+  database: "node_project",
 });
 
 con.connect((err) => {
@@ -32,12 +32,12 @@ con.connect((err) => {
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "1mb" }));
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000", // react app location
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:3000", // react app location
+    credentials: true,
+  })
+);
 app.use(
   session({
     resave: true,
@@ -50,11 +50,11 @@ app.use(cookieParser("your-secret-key"));
 // Routes
 app.get("/data", (req, res) => {
   var con = mysql.createConnection({
-    host: "127.0.0.1",
+    host: "localhost",
     user: "root",
-    password: "PfN8KqAUtrdzuIAHBgBn",
+    password: "root",
     port: "3306",
-    database: "agasy",
+    database: "node_project",
   });
   con.query("SELECT * FROM products", (err, result) => {
     res.send(result);
@@ -96,11 +96,11 @@ app.post("/new_item", (req, res) => {
     type
   );
   var con = mysql.createConnection({
-    host: "127.0.0.1",
+    host: "localhost",
     user: "root",
-    password: "PfN8KqAUtrdzuIAHBgBn",
+    password: "root",
     port: "3306",
-    database: "agasy",գի
+    database: "node_project",
   });
   var query =
     "INSERT INTO products (name, description, image, chipset, display_size, camera, storage, memory, price, sale_price, quantity, category, type) VALUES ?";

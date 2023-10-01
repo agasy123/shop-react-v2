@@ -18,7 +18,7 @@ import {
 
 function User() {
 	if (UserAuth()[0]) {	
-		return <li><li>Welcome admin, you can do whatever you want</li><li><SignedIn><Link to="/admin" >Admin</Link></SignedIn></li></li>
+		return <li><li>Welcome admin, you can do whatever you want</li><li><SignedIn><Link to="/admin">Admin Panel</Link></SignedIn></li></li>
 	}else {
 		return <li>Welcome {UserAuth()[1]}</li>
 	}
