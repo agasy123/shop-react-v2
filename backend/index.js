@@ -15,18 +15,20 @@ const io = require("socket.io")(server);
 const socketIOSession = require("socket.io-express-session");
 const sessionStorage = require("sessionstorage");
 const localStorage = require("localStorage");
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 var con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "root",
-  port: "3306",
+  user: "agasy",
+  password: `${process.env.MYSQL_PASSWORD}`,
   database: "node_project",
 });
 
 con.connect((err) => {
   if (err) throw err;
-  console.log("Database connected");
+  console.log('Database connected');
 });
 
 // Middleware
@@ -51,9 +53,8 @@ app.use(cookieParser("your-secret-key"));
 app.get("/data", (req, res) => {
   var con = mysql.createConnection({
     host: "localhost",
-    user: "root",
-    password: "root",
-    port: "3306",
+    user: "agasy",
+    password: `${process.env.MYSQL_PASSWORD}`,
     database: "node_project",
   });
   con.query("SELECT * FROM products", (err, result) => {
@@ -97,9 +98,8 @@ app.post("/new_item", (req, res) => {
   );
   var con = mysql.createConnection({
     host: "localhost",
-    user: "root",
-    password: "root",
-    port: "3306",
+    user: "agasy",
+    password: `${process.env.MYSQL_PASSWORD}`,
     database: "node_project",
   });
   var query =
@@ -164,6 +164,6 @@ app.post("/add_item_to_cart", function (req, res) {
 });
 
 // Server Start
-server.listen(5000, () => {
-  console.log("Server has started");
+server.listen(process.env.PORT, () => {
+  console.log(`Server has started in ${process.env.PORT}`);
 });
