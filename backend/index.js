@@ -36,7 +36,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "1mb" }));
 app.use(
   cors({
-    origin: "http://localhost:3000", // react app location
+    origin: "http://agasy.shop", // react app location
     credentials: true,
   })
 );
@@ -140,9 +140,10 @@ app.post("/update", (req, res) => {
         if (err) {
           console.log(err);
           res.send(err);
-        } else {
-          res.send("Updated Succsesfully");
         }
+	// else {
+        //  res.send("Updated Succsesfully");
+        //}
       });
     }
   });

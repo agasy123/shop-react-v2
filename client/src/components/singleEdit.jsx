@@ -32,7 +32,7 @@ function check_price(x, y) {
   const routeParams = useParams();
   const path = "../";
   const handleUpdate = async () => {
-    await fetch("http://localhost:5000/update", {
+    await fetch("http://162.250.126.167:5000/update", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),

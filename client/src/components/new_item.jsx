@@ -44,7 +44,7 @@ function New_item() {
       category: formValue.category,
       type: formValue.type,
     };
-    let res = await fetch("http://localhost:5000/new_item", {
+    let res = await fetch("http://162.250.126.167:5000/new_item", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(allInputValue),
