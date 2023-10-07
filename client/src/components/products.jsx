@@ -7,7 +7,7 @@ function Products(){
 	const [filter, setFilter]=useState("default");
 	const [data, setData]=useState();
     const apiGet=()=>{
-		axios.get("/data")
+		axios.get("http://agasy.shop:5000/data")
 		.then(data => setData(data.data))
 		.catch(error =>console.log(error))
 	};

@@ -1,4 +1,4 @@
- {
+{
   "name": "client_2",
   "version": "0.1.0",
   "private": true,
@@ -28,17 +28,13 @@
       "react-app"
     ]
   },
-  "browserslist": {
-    "production": [
+  "browserslist": [
       ">0.2%",
       "not dead",
       "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "proxy": "http://162.250.126.167:5000/"
+  ],
+  "proxy": "http://162.250.126.167:5000/",
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
 }

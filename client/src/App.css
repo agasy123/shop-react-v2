@@ -5,7 +5,7 @@
   text-decoration: none;
 }
 body {
-  background-image: url('../public/image2.jpg');
+  background-image: url('./public/image2.jpg');
   background-size: cover;
 }
 li > a {

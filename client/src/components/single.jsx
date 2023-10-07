@@ -16,7 +16,7 @@ export default function Single() {
   }, [cartItems])
 
   const apiGet = () => {
-    fetch("/data")
+    fetch("http://agasy.shop:5000/data")
       .then((resp) => resp.json())
       .then((resp) => {
         setData(resp);

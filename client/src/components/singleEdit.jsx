@@ -20,7 +20,7 @@ function check_price(x, y) {
  function User() {
   const [data, setData] = useState();
   const apiGet = () => {
-    fetch("/data")
+    fetch("http://agasy.shop:5000/data")
       .then((resp) => resp.json())
       .then((resp) => {
         setData(resp);

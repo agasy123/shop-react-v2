@@ -131,6 +131,12 @@ app.post("/new_item", (req, res) => {
 });
 
 app.post("/update", (req, res) => {
+  var con = mysql.createConnection({
+    host: "localhost",
+    user: "agasy",
+    password: `${process.env.MYSQL_PASSWORD}`,
+    database: "node_project",
+  });
   con.query("", (err, result) => {
     let products = req.body;
     for (let i = 0; i < products.length; i++) {
