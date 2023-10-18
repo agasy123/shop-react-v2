@@ -5,10 +5,18 @@ import axios from "axios";
 
 function Products(){
 	const [filter, setFilter]=useState("default");
-	const [data, setData]=useState();
+	const [data, setData]=useState([]);
     const apiGet=()=>{
-		axios.get("http://agasy.shop:5000/data")
-		.then(data => setData(data.data))
+		fetch("http://localhost:5000/dataFromDatabase",{
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+      .then((resp) => resp.json())
+      .then((resp) => {
+		console.log(resp);
+        setData(resp);
+      })
 		.catch(error =>console.log(error))
 	};
 	useEffect(()=>{
@@ -57,8 +65,7 @@ function Products(){
 					setSearchTerm(event.target.value)
 				}}></input>
 			<div className='prodPage'>
-        	{ 
-			()=>{if(data){console.log(data);}else{return<h1>There is no data now</h1>}}}{
+				{
 			data?.sort(compare).filter((val)=>{
 				if (searchTerm=="") {
 					return val;

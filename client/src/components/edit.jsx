@@ -4,7 +4,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 function EditItems() {
   const [dbData, setData] = useState();
   const apiGet = () => {
-    fetch("http://agasy.shop:5000/data")
+    fetch("/data")
       .then((resp) => resp.json())
       .then((resp) => {
         // console.log(resp);
