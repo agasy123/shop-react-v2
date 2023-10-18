@@ -137,22 +137,18 @@ app.post("/update", (req, res) => {
     password: `${process.env.MYSQL_PASSWORD}`,
     database: "node_project",
   });
-  con.query("", (err, result) => {
     let products = req.body;
     for (let i = 0; i < products.length; i++) {
       var query = "UPDATE products SET ? WHERE id=?";
       var values = [products[i], products[i].id];
       con.query(query, values, (err, result) => {
-        if (err) {
+        if (!err) {
+          res.status(200).json({ success: "Item Has Been Updated" });
+        } else {
           console.log(err);
-          res.send(err);
         }
-	// else {
-        //  res.send("Updated Succsesfully");
-        //}
       });
     }
-  });
 });
 
 // Access the session as req.session

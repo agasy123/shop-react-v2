@@ -19,6 +19,7 @@ function check_price(x, y) {
 
  function User() {
   const [data, setData] = useState();
+  const [message, setMessage] = useState();
   const apiGet = () => {
     fetch("http://agasy.shop:5000/data")
       .then((resp) => resp.json())
@@ -32,17 +33,19 @@ function check_price(x, y) {
   const routeParams = useParams();
   const path = "../";
   const handleUpdate = async () => {
-    await fetch("http://162.250.126.167:5000/update", {
+    let res=await fetch("http://162.250.126.167:5000/update", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
-    })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    });
+    let resjson = await res.json();
+    if (res.status === 200) {
+      setMessage(resjson.success);
+    } else {
+      setMessage("Error");
+    }
+    console.log(message);
+
   };
   if (UserAuth()[0]) {
     return (
