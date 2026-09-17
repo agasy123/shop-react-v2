@@ -21,7 +21,7 @@ function check_price(x, y) {
   const [data, setData] = useState();
   const [message, setMessage] = useState();
   const apiGet = () => {
-    fetch("http://agasy.shop:5000/data")
+    fetch("/data")
       .then((resp) => resp.json())
       .then((resp) => {
         setData(resp);
@@ -33,7 +33,7 @@ function check_price(x, y) {
   const routeParams = useParams();
   const path = "../";
   const handleUpdate = async () => {
-    let res=await fetch("http://162.250.126.167:5000/update", {
+    let res=await fetch("/update", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
@@ -50,9 +50,8 @@ function check_price(x, y) {
   if (UserAuth()[0]) {
     return (
       <div>
-        {data?.map((item) => {
-          if (item.id == routeParams.id) {
-            return (
+        {data?.filter((item)=> String(item.id)===String(routeParams.id)).map((item) => {
+            return(
               <article className="singleArticle" key={item.id}>
                 {/* ---------------------------name----------------------------- */}
                 <h1>{item.name}</h1>
@@ -60,7 +59,7 @@ function check_price(x, y) {
                   style={{ marginBottom: "70px" }}
                   placeholder={item.name}
                   onChange={(e) => {
-                    if (e.target.value != "") {
+                    if (e.target.value !== "") {
                       item.name = e.target.value;
                     }
                   }}
@@ -81,7 +80,7 @@ function check_price(x, y) {
                     <h3>{item.description}</h3>
                     <textarea
                       onChange={(e) => {
-                        if (e.target.value != "") {
+                        if (e.target.value !== "") {
                           item.description = e.target.value;
                         }
                       }}
@@ -91,7 +90,7 @@ function check_price(x, y) {
                     <input
                       placeholder={item.price}
                       onChange={(e) => {
-                        if (e.target.value != "") {
+                        if (e.target.value !== "") {
                           item.price = e.target.value;
                         }
                       }}
@@ -109,7 +108,7 @@ function check_price(x, y) {
                       <input
                         placeholder={item.chipset}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             item.chipset = e.target.value;
                           }
                         }}
@@ -125,7 +124,7 @@ function check_price(x, y) {
                       <input
                         placeholder={item.display_size}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             item.display_size = e.target.value;
                           }
                         }}
@@ -141,7 +140,7 @@ function check_price(x, y) {
                       <input
                         placeholder={item.camera}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             item.camera = e.target.value;
                           }
                         }}
@@ -157,7 +156,7 @@ function check_price(x, y) {
                       <input
                         placeholder={item.storage}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             item.storage = e.target.value;
                           }
                         }}
@@ -173,7 +172,7 @@ function check_price(x, y) {
                       <input
                         placeholder={item.memory}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             item.memory = e.target.value;
                           }
                         }}
@@ -189,8 +188,7 @@ function check_price(x, y) {
                   Submit
                 </a>
               </article>
-            );
-          }
+            )
         })}
       </div>
     );

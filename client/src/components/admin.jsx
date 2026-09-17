@@ -1,17 +1,13 @@
 import { React, useState } from "react";
 import {
-  ClerkProvider,
-  useUser,
-  SignedIn,
-  SignIn,
-  SignInButton,
-  SignOutButton,
-  SignedOut,
-  RedirectToSignIn,
+    SignedIn,
+    SignedOut,
+    SignOutButton,
+    RedirectToSignIn,
 } from "@clerk/clerk-react";
 import UserAuth from "./userAuth";
 import EditItems from "./edit";
-import New_item from "./new_item";
+import Newitem from "./new_item";
 
 function User() {
   const [isEdit, setIsEdit] = useState(false);
@@ -33,7 +29,7 @@ function User() {
         <button onClick={toggleNew}>
           {isNew ? "Close New Items" : "Open New items"}
         </button>
-        {isNew && <New_item />}
+        {isNew && <Newitem />}
       </div>
     );
   } else {

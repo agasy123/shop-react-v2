@@ -2,23 +2,16 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import UserAuth from './userAuth';
 import {
-	ClerkProvider,
 	SignedIn,
 	SignInButton,
 	SignedOut,
-	SignOut,
 	UserButton,
-	useUser,
-	RedirectToSignIn,
 	SignOutButton,
-	UserProfile,
-	useSession,
-	useClerk,
   } from "@clerk/clerk-react";
 
 function User() {
 	if (UserAuth()[0]) {	
-		return <li><li>Welcome admin, you can do whatever you want</li><li><SignedIn><Link to="/admin">Admin Panel</Link></SignedIn></li></li>
+		return <><li>Welcome admin, you can do whatever you want</li><li><SignedIn><Link to="/admin">Admin Panel</Link></SignedIn></li></>
 	}else {
 		return <li>Welcome {UserAuth()[1]}</li>
 	}
@@ -36,8 +29,7 @@ function NavBar() {
 				    <li><Link to="/contact" >Contact</Link></li>
 					<li><Link to="/cart">Cart</Link></li>
 				    <li><SignedOut><SignInButton /> </SignedOut><SignedIn><UserButton showName={true}/><SignOutButton /></SignedIn></li>
-					<li><SignedIn><User /></SignedIn></li>
-					<li></li>
+					<SignedIn><User /></SignedIn>
 			    </ul>
 		    </nav>
 	    </header>

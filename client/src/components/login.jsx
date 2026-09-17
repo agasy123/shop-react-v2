@@ -10,7 +10,7 @@ function Login() {
             username:username,
             password:password
         }
-        let res=await fetch("http://localhost:5000/api_login",{
+        let res=await fetch("/api_login",{
             method:"POST",
             headers:{'content-type':'application/json'},
             body:JSON.stringify(allInputValue)

@@ -22,7 +22,7 @@ function Register() {
             password:password,
             user_status:user_status
         }
-        let res=await fetch("http://localhost:5000/api_register",{
+        let res=await fetch("/api_register",{
             method:"POST",
             headers:{'content-type':'application/json'},
             body:JSON.stringify(allInputValue)

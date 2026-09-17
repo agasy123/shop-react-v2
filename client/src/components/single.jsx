@@ -11,12 +11,14 @@ export default function Single() {
   const [cartItems, setCartItems] = useState(storedItems);
 
   useEffect(()=>{
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-    console.log(storedItems);
+    if (cartItems){
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
+    //console.log(storedItems);
   }, [cartItems])
 
   const apiGet = () => {
-    fetch("http://agasy.shop:5000/data")
+    fetch("/data")
       .then((resp) => resp.json())
       .then((resp) => {
         setData(resp);
@@ -46,9 +48,10 @@ export default function Single() {
   const path = "../";
   return (
     <div>
-      {data?.map((item) => {
-        if (item.id == routeParams.id) {
-          return (
+      {
+        data?.filter((item)=>String(item.id)===String(routeParams.id))
+              .map((item) => {
+              return(
             <article className="singleArticle" key={item.id}>
               <h1 style={{ marginBottom: "70px" }}>{item.name}</h1>
               <div className="singlePage">
@@ -82,9 +85,9 @@ export default function Single() {
                 </div>
               </div>
             </article>
-          );
-        }
-      })}
+              )
+            })
+      }
     </div>
   );
 }

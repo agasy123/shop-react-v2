@@ -16,29 +16,56 @@ const socketIOSession = require("socket.io-express-session");
 const sessionStorage = require("sessionstorage");
 const localStorage = require("localStorage");
 const dotenv = require('dotenv');
-
 dotenv.config();
+const allowedOrigins = [
+  "http://localhost:3000",             // Local React development server
+  "http://localhost:5000",             // Local Node/Express server
+  "http://localhost:3000/",             // Local Node/Express server
+  "http://localhost:5000/",             // Local Node/Express server
+  process.env.CLIENT_ORIGIN,           // Live Render URL (e.g. https://your-app.onrender.com)
+].filter(Boolean);
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "agasy",
-  password: `${process.env.MYSQL_PASSWORD}`,
-  database: "node_project",
+
+// Database connection pool (defined ONCE at the top)
+const con = mysql.createPool({
+  host: process.env.MYSQL_HOST || "localhost",
+  user: process.env.MYSQL_USER || "agasy",
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE || "node_project",
+  port: process.env.MYSQL_PORT || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  ssl: process.env.MYSQL_HOST && process.env.MYSQL_HOST !== "localhost"
+      ? { minVersion: "TLSv1.2", rejectUnauthorized: true }
+      : false,// SSL for cloud DB
 });
 
-con.connect((err) => {
-  if (err) throw err;
-  console.log('Database connected');
+// Quick check to confirm DB connects on startup
+con.getConnection((err, connection) => {
+  if (err) {
+    console.error("Database connection failed:", err.message);
+  } else {
+    console.log("Database connected successfully!");
+    connection.release(); // release back to the pool
+  }
 });
 
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "1mb" }));
 app.use(
-  cors({
-    origin: "http://agasy.shop", // react app location
-    credentials: true,
-  })
+    cors({
+      origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, or same-origin static requests)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS blocked for origin: ${origin}`));
+        }
+      },
+      credentials: true,
+    })
 );
 app.use(
   session({
@@ -51,12 +78,6 @@ app.use(cookieParser("your-secret-key"));
 
 // Routes
 app.get("/data", (req, res) => {
-  var con = mysql.createConnection({
-    host: "localhost",
-    user: "agasy",
-    password: `${process.env.MYSQL_PASSWORD}`,
-    database: "node_project",
-  });
   con.query("SELECT * FROM products", (err, result) => {
     res.send(result);
   });
@@ -96,12 +117,6 @@ app.post("/new_item", (req, res) => {
     category,
     type
   );
-  var con = mysql.createConnection({
-    host: "localhost",
-    user: "agasy",
-    password: `${process.env.MYSQL_PASSWORD}`,
-    database: "node_project",
-  });
   var query =
     "INSERT INTO products (name, description, image, chipset, display_size, camera, storage, memory, price, sale_price, quantity, category, type) VALUES ?";
   var values = [
@@ -130,24 +145,24 @@ app.post("/new_item", (req, res) => {
   });
 });
 
-app.post("/update", (req, res) => {
-  var con = mysql.createConnection({
-    host: "localhost",
-    user: "agasy",
-    password: `${process.env.MYSQL_PASSWORD}`,
-    database: "node_project",
-  });
+app.post("/update", async (req, res) => {
     let products = req.body;
-    for (let i = 0; i < products.length; i++) {
-      var query = "UPDATE products SET ? WHERE id=?";
-      var values = [products[i], products[i].id];
-      con.query(query, values, (err, result) => {
-        if (!err) {
-          res.status(200).json({ success: "Item Has Been Updated" });
-        } else {
-          console.log(err);
-        }
+
+    if(!Array.isArray(products)) {
+      products = [products];
+    }
+
+    try {
+      const updatePromises=products.map((product) => {
+        const query ="UPDATE products SET ? WHERE id=?";
+        const values = [product, product.id];
+        return con.promise().query(query, values);
       });
+      await Promise.all(updatePromises);
+      res.status(200).json({ success: "Updated successfully" });
+    }catch (err) {
+      console.error("Error updating product", err);
+      res.status(500).json({ error: "Failed to update product" });
     }
 });
 
@@ -166,7 +181,19 @@ app.post("/add_item_to_cart", function (req, res) {
   res.end("req.session.cart");
 });
 
+
+const path = require("path");
+
+// 1. Serve the compiled React build files
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+// 2. Fallback: Any GET request not matching an API route returns index.html (for React Router)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
+
 // Server Start
-server.listen(process.env.PORT, () => {
-  console.log(`Server has started in ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server has started on port ${PORT}`);
 });

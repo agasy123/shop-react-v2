@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 function home(){
     return(
@@ -12,7 +13,7 @@ function home(){
         <div className="homepage">
             <h1 id='homepage-h1'>HOME PAGE</h1>
             <h2 id='homepage-text'>Our main phone is Iphone, but you can find other phones in products page</h2>
-            <a class="prodPageButton" href="products">Click here to go to products page</a>
+            <Link className="prodPageButton" href="products">Click here to go to products page</Link>
          </div>
     </div>
         </div>

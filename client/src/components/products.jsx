@@ -7,7 +7,7 @@ function Products(){
 	const [filter, setFilter]=useState("default");
 	const [data, setData]=useState();
     const apiGet=()=>{
-		axios.get("http://agasy.shop:5000/data")
+		axios.get("/data")
 		.then(data => setData(data.data))
 		.catch(error =>console.log(error))
 	};
@@ -26,11 +26,11 @@ function Products(){
 		}
 	}
 	function compare(a, b) {
-		if (filter=="increases") {
+		if (filter==="increases") {
 			return a.price-b.price;
-		}else if (filter=="decreases") {
+		}else if (filter==="decreases") {
 			return b.price-a.price;
-		}else if(filter=="default"){
+		}else if(filter==="default"){
 			if (a.name<b.name) return -1;
 			return 1;
 		}
@@ -57,14 +57,13 @@ function Products(){
 					setSearchTerm(event.target.value)
 				}}></input>
 			<div className='prodPage'>
-        	{ 
-			()=>{if(data){console.log(data);}else{return<h1>There is no data now</h1>}}}{
+        	{!data || data.length===0 ?(
+				<h1>There is no data now</h1>
+			):(
 			data?.sort(compare).filter((val)=>{
-				if (searchTerm=="") {
-					return val;
-				} else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-					return val;
-				}
+				if (searchTerm==="") {
+					return true;
+				} return val.name.toLowerCase().includes(searchTerm.toLowerCase())
 			}).map((item)=>{
 			return <article className='product' key={item.id}>
 				<h1>{item.name}</h1>
@@ -75,7 +74,7 @@ function Products(){
 				</div>
 				</article>
 			})
-			}
+			)}
 			</div>
 	    </div>
     )

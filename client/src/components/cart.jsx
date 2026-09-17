@@ -11,11 +11,13 @@ function Cart() {
   }
   useEffect(()=>{
     apiGet();
-    console.log(cartItems);
+    //console.log(cartItems);
   },[])
   return(
     <div>
-      {()=>{if(cartItems){console.log(cartItems);}else{return<h1>There is no Cart items now</h1>}}}
+      {!cartItems || cartItems.length===0 ? (
+          <h1>There is no Car items now</h1>
+      ): null}
       {
         cartItems?.map((item)=>{
           return <div key={item.id}>

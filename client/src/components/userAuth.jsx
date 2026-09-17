@@ -1,5 +1,4 @@
-import React from "react";
-import { ClerkProvider, useUser } from "@clerk/clerk-react";
+import {useUser} from "@clerk/clerk-react";
 
 function UserAuth() {
   const {user} = useUser()
