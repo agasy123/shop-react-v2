@@ -13,7 +13,7 @@ function home(){
         <div className="homepage">
             <h1 id='homepage-h1'>HOME PAGE</h1>
             <h2 id='homepage-text'>Our main phone is Iphone, but you can find other phones in products page</h2>
-            <Link className="prodPageButton" href="products">Click here to go to products page</Link>
+            <Link className="prodPageButton" to="/products">Click here to go to products page</Link>
          </div>
     </div>
         </div>
