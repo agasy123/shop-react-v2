@@ -1,2 +1,13 @@
 User-agent: *
 Allow: /
+Allow: /products
+Allow: /single/
+Allow: /contact
+
+# Disallow private, administrative, and session routes
+Disallow: /admin
+Disallow: /singleedit/
+Disallow: /cart
+
+# Sitemap
+Sitemap: https://shop-react-v2.onrender.com/sitemap.xml

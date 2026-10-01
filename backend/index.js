@@ -181,6 +181,47 @@ app.post("/add_item_to_cart", function (req, res) {
   res.end("req.session.cart");
 });
 
+// Dynamic Sitemap for SEO
+app.get("/sitemap.xml", (req, res) => {
+  const baseUrl = (process.env.CLIENT_ORIGIN || "https://shop-react-v2.onrender.com").replace(/\/$/, "");
+
+  con.query("SELECT id FROM products", (err, products) => {
+    if (err) {
+      console.error("Error generating sitemap:", err);
+      return res.status(500).end();
+    }
+
+    const staticUrls = [
+      { loc: `${baseUrl}/`, priority: "1.0", changefreq: "daily" },
+      { loc: `${baseUrl}/products`, priority: "0.9", changefreq: "daily" },
+      { loc: `${baseUrl}/contact`, priority: "0.7", changefreq: "monthly" },
+    ];
+
+    const dynamicUrls = (products || []).map((product) => ({
+      loc: `${baseUrl}/single/${product.id}`,
+      priority: "0.8",
+      changefreq: "weekly",
+    }));
+
+    const allUrls = [...staticUrls, ...dynamicUrls];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allUrls
+  .map(
+    (u) => `  <url>
+    <loc>${u.loc}</loc>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`
+  )
+  .join("\n")}
+</urlset>`;
+
+    res.header("Content-Type", "application/xml");
+    res.status(200).send(xml);
+  });
+});
 
 const path = require("path");
 
