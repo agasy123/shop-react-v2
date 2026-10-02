@@ -22,7 +22,7 @@ function NavBar() {
     return(
         <header>
 		    <nav>
-                <h1 id='logo-text'>Aghasi Harutyunyan</h1>
+                <h1 id='logo-text'>Agasy Harutyunyan</h1>
 			    <ul className='menu'>
 				    <li><Link to="/">Home</Link></li>
 				    <li><Link to="/products">Products</Link></li>
