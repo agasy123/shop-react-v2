@@ -11,8 +11,8 @@ function home(){
             <img id="homeIphone3" src="iphone3.jpg" alt="not found"></img>
         </div>
         <div className="homepage">
-            <h1 id='homepage-h1'>HOME PAGE</h1>
-            <h2 id='homepage-text'>Our main phone is Iphone, but you can find other phones in products page</h2>
+            <h1 id='homepage-h1'>Agasy's Shop</h1>
+            <h2 id='homepage-text'>Explore top smartphones, electronics, and gadgets at Agasy's Shop. Find deals on Samsung, iPhone, Xiaomi, and more.</h2>
             <Link className="prodPageButton" to="/products">Click here to go to products page</Link>
          </div>
     </div>
