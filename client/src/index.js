@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 // import { UserContextProvider } from './app-context/user-context-provider';
 import { ClerkProvider } from "@clerk/clerk-react";
+import { LanguageProvider } from "./context/LanguageContext";
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 	throw new Error("Missing Publishable Key")
@@ -18,7 +19,9 @@ root.render(
   <React.StrictMode>
   {/* <UserContextProvider> */}
     <ClerkProvider publishableKey={clerkPubKey}>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </ClerkProvider>
   {/* </UserContextProvider> */}
   </React.StrictMode>

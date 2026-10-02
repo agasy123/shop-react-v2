@@ -7,29 +7,42 @@ import {
 	SignedOut,
 	UserButton,
 	SignOutButton,
-  } from "@clerk/clerk-react";
+} from "@clerk/clerk-react";
+import { useTranslation } from "../context/LanguageContext";
 
 function User() {
+	const { t } = useTranslation();
 	if (UserAuth()[0]) {	
-		return <><li>Welcome admin, you can do whatever you want</li><li><SignedIn><Link to="/admin">Admin Panel</Link></SignedIn></li></>
+		return <><li>{t("nav.welcomeAdmin")}</li><li><SignedIn><Link to="/admin">{t("nav.adminPanel")}</Link></SignedIn></li></>
 	}else {
-		return <li>Welcome {UserAuth()[1]}</li>
+		return <li>{t("nav.welcomeUser")} {UserAuth()[1]}</li>
 	}
 }
 
-
 function NavBar() {
+	const { language, toggleLanguage, t } = useTranslation();
+
     return(
         <header>
 		    <nav>
-                <h1 id='logo-text'>Agasy Harutyunyan</h1>
+                <h1 id='logo-text'>Aghasi Harutyunyan</h1>
 			    <ul className='menu'>
-				    <li><Link to="/">Home</Link></li>
-				    <li><Link to="/products">Products</Link></li>
-				    <li><Link to="/contact" >Contact</Link></li>
-					<li><Link to="/cart">Cart</Link></li>
+				    <li><Link to="/">{t("nav.home")}</Link></li>
+				    <li><Link to="/products">{t("nav.products")}</Link></li>
+				    <li><Link to="/contact">{t("nav.contact")}</Link></li>
+					<li><Link to="/cart">{t("nav.cart")}</Link></li>
 				    <li><SignedOut><SignInButton /> </SignedOut><SignedIn><UserButton showName={true}/><SignOutButton /></SignedIn></li>
 					<SignedIn><User /></SignedIn>
+					<li>
+						<button 
+							type="button" 
+							className="lang-btn" 
+							onClick={toggleLanguage}
+							title="Change Language"
+						>
+							🌐 {language === 'hy' ? 'EN' : 'ՀԱՅ'}
+						</button>
+					</li>
 			    </ul>
 		    </nav>
 	    </header>

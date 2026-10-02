@@ -1,21 +1,20 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-
+import { useTranslation } from "../context/LanguageContext";
 
 export default function Single() {
+  const { t } = useTranslation();
   const [data, setData] = useState();
-  const storedItems=localStorage.getItem("cart");
+  const storedItems = localStorage.getItem("cart");
 
   const [cartItems, setCartItems] = useState(storedItems);
 
-  useEffect(()=>{
-    if (cartItems){
+  useEffect(() => {
+    if (cartItems) {
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
-    //console.log(storedItems);
-  }, [cartItems])
+  }, [cartItems]);
 
   const apiGet = () => {
     fetch("/data")
@@ -28,30 +27,23 @@ export default function Single() {
     apiGet();
   }, []);
 
-
-
-  // async function addItemToCart(item, quantity) {
-  //   await fetch("/add_item_to_cart", {
-  //     method: "POST",
-  //     headers: { "content-type": "application/json" },
-  //     body: JSON.stringify(item),
-  //   });
-  // }
   function addItemToCart(item, quantity) {
     if (cartItems) {
-      setCartItems(cartItems=> [...cartItems, JSON.stringify(item.name)])
-    }else{
+      setCartItems((cartItems) => [...cartItems, JSON.stringify(item.name)]);
+    } else {
       setCartItems(JSON.stringify(item.name));
     }
   }
+
   const routeParams = useParams();
   const path = "../";
+
   return (
     <div>
-      {
-        data?.filter((item)=>String(item.id)===String(routeParams.id))
-              .map((item) => {
-              return(
+      {data
+        ?.filter((item) => String(item.id) === String(routeParams.id))
+        .map((item) => {
+          return (
             <article className="singleArticle" key={item.id}>
               <h1 style={{ marginBottom: "70px" }}>{item.name}</h1>
               <div className="singlePage">
@@ -60,34 +52,41 @@ export default function Single() {
                 </div>
                 <div className="singleDescp">
                   <h3>{item.description}</h3>
-                  <button id="addToCart" onClick={()=>{addItemToCart(item,document.getElementById("quantity").value)}}>
-                    Add to Cart
+                  <button
+                    id="addToCart"
+                    onClick={() => {
+                      addItemToCart(
+                        item,
+                        document.getElementById("quantity").value
+                      );
+                    }}
+                  >
+                    {t("single.addToCart")}
                   </button>
                   <input type="number" name="quantity" id="quantity" />
                 </div>
                 <div className="specs">
-                  <h1>Specifications</h1>
-                  <span className="specs_span">Chipset:</span>
+                  <h1>{t("single.specifications")}</h1>
+                  <span className="specs_span">{t("single.chipset")}</span>
                   <span>{item.chipset}</span>
                   <br></br>
-                  <span className="specs_span">Display Size:</span>
+                  <span className="specs_span">{t("single.displaySize")}</span>
                   <span>{item.display_size}"</span>
                   <br></br>
-                  <span className="specs_span">Camera:</span>
+                  <span className="specs_span">{t("single.camera")}</span>
                   <span>{item.camera} Mp</span>
                   <br></br>
-                  <span className="specs_span">Storage:</span>
+                  <span className="specs_span">{t("single.storage")}</span>
                   <span>{item.storage} Gb</span>
                   <br></br>
-                  <span className="specs_span">Memory:</span>
+                  <span className="specs_span">{t("single.memory")}</span>
                   <span>{item.memory} Gb</span>
                   <br></br>
                 </div>
               </div>
             </article>
-              )
-            })
-      }
+          );
+        })}
     </div>
   );
 }

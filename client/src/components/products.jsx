@@ -2,17 +2,19 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import {Link} from 'react-router-dom';
 import axios from "axios";
+import { useTranslation } from "../context/LanguageContext";
 
 function Products(){
+	const { t } = useTranslation();
 	const [filter, setFilter]=useState("default");
 	const [data, setData]=useState();
-    const apiGet=()=>{
+	const apiGet=()=>{
 		axios.get("/data")
 		.then(data => setData(data.data))
 		.catch(error =>console.log(error))
 	};
 	useEffect(()=>{
-   		apiGet();
+		apiGet();
 	},[])
 	const [searchTerm, setSearchTerm]=useState('');
 	function check_price(x,y) {
@@ -37,28 +39,27 @@ function Products(){
 	}
     return(
         <div className='main'>
-			
 				<form>
 				<input type={"radio"} name={"filter"} onChange={()=>{
 					setFilter("default")
-				}}></input> <label>default</label><br />
+				}}></input> <label>{t("products.filterDefault")}</label><br />
 				<input type={"radio"} name={"filter"} onChange={()=>{
 					setFilter("increases")
-				}}></input> <label>Price increases</label><br />
+				}}></input> <label>{t("products.filterIncreases")}</label><br />
 				<input type={"radio"} name={"filter"} onChange={()=>{
 					setFilter("decreases")
-				}}></input> <label>Price decreases</label>
+				}}></input> <label>{t("products.filterDecreases")}</label>
 				</form>
 				<input 
 				className='search'
 				type={"text"} 
-				placeholder={"Search"} 
+				placeholder={t("products.searchPlaceholder")} 
 				onChange={event =>{
 					setSearchTerm(event.target.value)
 				}}></input>
 			<div className='prodPage'>
         	{!data || data.length===0 ?(
-				<h1>There is no data now</h1>
+				<h1>{t("products.noData")}</h1>
 			):(
 			data?.sort(compare).filter((val)=>{
 				if (searchTerm==="") {
@@ -70,7 +71,7 @@ function Products(){
 				<div className='product'>
 					<img src={item.image} alt="not found"></img>
 					{check_price(item.sale_price,item.price)}
-					<Link to={`/single/${item.id}`}>Show More</Link>
+					<Link to={`/single/${item.id}`}>{t("products.showMore")}</Link>
 				</div>
 				</article>
 			})
