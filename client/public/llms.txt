@@ -1,0 +1,44 @@
+# Shop React V2 - E-Commerce Website
+
+## Overview
+This is a React-based e-commerce website for selling mobile phones and electronics. The application is built with React, React Router, and includes internationalization support.
+
+## Purpose
+The website allows users to:
+- Browse and search for products
+- View detailed product information
+- Add items to shopping cart
+- Manage cart items
+- Switch between multiple languages (English, Armenian, Russian)
+
+## Technology Stack
+- Frontend: React
+- Routing: React Router
+- Internationalization: react-i18next
+- Styling: CSS
+- Authentication: Clerk
+
+## Key Components
+- Home page with featured products
+- Products page with search and filtering
+- Single product detail page
+- Shopping cart functionality
+- Admin panel for product management
+- Contact page
+
+## API Endpoints
+The application fetches product data from a backend API.
+
+## Accessibility
+The website follows accessibility best practices including:
+- Semantic HTML structure
+- ARIA labels for form elements
+- Keyboard navigation support
+- Color contrast compliance
+
+## Performance
+Optimized for performance with:
+- Lazy loading for images
+- Loading skeletons for dynamic content
+- Minified CSS and JavaScript
+- Responsive design for all screen sizes
