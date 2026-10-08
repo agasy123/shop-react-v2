@@ -58,7 +58,13 @@ function Products(){
 					setSearchTerm(event.target.value)
 				}}></input>
 			<div className='prodPage'>
-        	{!data || data.length===0 ?(
+        	{!data ? (
+				<div className="loading-skeleton">
+					<div className="skeleton-product"></div>
+					<div className="skeleton-product"></div>
+					<div className="skeleton-product"></div>
+				</div>
+			) : data.length===0 ?(
 				<h1>{t("products.noData")}</h1>
 			):(
 			data?.sort(compare).filter((val)=>{
@@ -69,7 +75,7 @@ function Products(){
 			return <article className='product' key={item.id}>
 				<h1>{item.name}</h1>
 				<div className='product'>
-					<img src={item.image} alt="not found"></img>
+					<img src={item.image} alt="not found" width="200" height="200"></img>
 					{check_price(item.sale_price,item.price)}
 					<Link to={`/single/${item.id}`}>{t("products.showMore")}</Link>
 				</div>

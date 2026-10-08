@@ -18,14 +18,19 @@ function Cart() {
   }, []);
 
   return (
-    <div>
-      {!cartItems || cartItems.length === 0 ? (
+    <div className="main">
+      {!cartItems ? (
+        <div className="loading-skeleton">
+          <div className="skeleton-cart"></div>
+          <div className="skeleton-cart"></div>
+        </div>
+      ) : cartItems.length === 0 ? (
         <h1>{t("cart.empty")}</h1>
       ) : null}
       {cartItems?.map((item) => {
         return (
           <div key={item.id}>
-            <img src={item.image} alt="not found"></img>
+            <img src={item.image} alt="not found" width="100" height="100"></img>
             <h1>{item.name}</h1>
           </div>
         );

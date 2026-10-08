@@ -40,7 +40,14 @@ export default function Single() {
 
   return (
     <div>
-      {data
+      {!data ? (
+        <div className="singleArticle">
+          <div className="loading-skeleton">
+            <div className="skeleton-title"></div>
+            <div className="skeleton-content"></div>
+          </div>
+        </div>
+      ) : data
         ?.filter((item) => String(item.id) === String(routeParams.id))
         .map((item) => {
           return (
@@ -48,7 +55,7 @@ export default function Single() {
               <h1 style={{ marginBottom: "70px" }}>{item.name}</h1>
               <div className="singlePage">
                 <div>
-                  <img src={path + item.image} alt="not found"></img>
+                  <img src={path + item.image} alt="not found" width="400" height="400"></img>
                 </div>
                 <div className="singleDescp">
                   <h3>{item.description}</h3>

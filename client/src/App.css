@@ -343,15 +343,13 @@ button:active {
   backdrop-filter: blur(10px);
 }
 footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
   padding: 20px;
   text-align: center;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  margin-top: auto;
 }
 
 header {
@@ -400,6 +398,8 @@ header {
   border-radius: 12px;
   margin-bottom: 16px;
   transition: transform 0.3s ease;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 .product img:hover {
@@ -714,13 +714,68 @@ form input[type="radio"] {
   .product {
     min-width: 100%;
   }
-  
+
   .product img {
     max-width: 100px;
   }
-  
+
   .specs_div {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* Loading Skeleton Styles */
+.loading-skeleton {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.skeleton-product {
+  width: 200px;
+  height: 300px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 16px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 40px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+
+.skeleton-content {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 16px;
+}
+
+.skeleton-cart {
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
