@@ -48,7 +48,7 @@ export default function Single() {
           </div>
         </div>
       ) : data
-        ?.filter((item) => String(item.id) === String(routeParams.id))
+        ?.filter((item) => String(item.name) === String(routeParams.name))
         .map((item) => {
           return (
             <article className="singleArticle" key={item.id}>

@@ -7,6 +7,7 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-size: cover;
   min-height: 100vh;
+  padding-top: 80px;
 }
 li > a {
   color: white;
@@ -357,6 +358,7 @@ header {
   right: 0;
   top: 0;
   width: 100%;
+  z-index: 1000;
 }
 .cl-internal-jayce9 {
   color: white;

@@ -17,7 +17,7 @@ function App() {
       <NavBar />
       <Route exact path="/" component={Home} />
       <Route exact path="/products" component={Products} />
-      <Route exact path="/single/:id" component={Single} />
+      <Route exact path="/single/:name" component={Single} />
       <Route exact path="/singleedit/:id" component={SingleEdit} />
       <Route exact path="/contact" component={Contact} />
       <Route exact path="/admin" component={Admin} />

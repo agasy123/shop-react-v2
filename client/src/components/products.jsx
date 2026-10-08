@@ -77,7 +77,7 @@ function Products(){
 				<div className='product'>
 					<img src={item.image} alt="not found" width="200" height="200"></img>
 					{check_price(item.sale_price,item.price)}
-					<Link to={`/single/${item.id}`}>{t("products.showMore")}</Link>
+					<Link to={`/single/${item.name}`}>{t("products.showMore")}</Link>
 				</div>
 				</article>
 			})
