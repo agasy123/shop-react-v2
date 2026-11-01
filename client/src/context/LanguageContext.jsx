@@ -26,6 +26,7 @@ const translations = {
     },
     single: {
       addToCart: "Add to Cart",
+      added: "Added!",
       specifications: "Specifications",
       chipset: "Chipset:",
       displaySize: "Display Size:",
@@ -34,7 +35,10 @@ const translations = {
       memory: "Memory:",
     },
     cart: {
+      title: "Shopping Cart",
       empty: "There are no cart items now",
+      remove: "Remove",
+      total: "Total",
     },
     contact: {
       title: "Contact Us",
@@ -73,6 +77,7 @@ const translations = {
     },
     single: {
       addToCart: "Ավելացնել զամբյուղ",
+      added: "Ավելացված է",
       specifications: "Բնութագիր",
       chipset: "Պրոցեսոր (Chipset):",
       displaySize: "Էկրանի չափս:",
@@ -81,7 +86,10 @@ const translations = {
       memory: "Օպերատիվ (RAM):",
     },
     cart: {
+      title: "Գնումների զամբյուղ",
       empty: "Զամբյուղում ապրանքներ չկան",
+      remove: "Ջնջել",
+      total: "Ընդհանուր",
     },
     contact: {
       title: "Կապ մեզ հետ",

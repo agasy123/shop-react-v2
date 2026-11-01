@@ -2,19 +2,12 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "../context/LanguageContext";
+import axios from "axios";
 
 export default function Single() {
   const { t } = useTranslation();
   const [data, setData] = useState();
-  const storedItems = localStorage.getItem("cart");
-
-  const [cartItems, setCartItems] = useState(storedItems);
-
-  useEffect(() => {
-    if (cartItems) {
-      localStorage.setItem("cart", JSON.stringify(cartItems));
-    }
-  }, [cartItems]);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   const apiGet = () => {
     fetch("/data")
@@ -28,11 +21,16 @@ export default function Single() {
   }, []);
 
   function addItemToCart(item, quantity) {
-    if (cartItems) {
-      setCartItems((cartItems) => [...cartItems, JSON.stringify(item.name)]);
-    } else {
-      setCartItems(JSON.stringify(item.name));
-    }
+    axios
+      .post("/add_item_to_cart", {
+        product_id: item.id,
+        quantity: parseInt(quantity) || 1
+      })
+      .then((res) => {
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 2000);
+      })
+      .catch((error) => console.log(error));
   }
 
   const routeParams = useParams();
@@ -67,10 +65,11 @@ export default function Single() {
                         document.getElementById("quantity").value
                       );
                     }}
+                    disabled={addedToCart}
                   >
-                    {t("single.addToCart")}
+                    {addedToCart ? t("single.added") : t("single.addToCart")}
                   </button>
-                  <input type="number" name="quantity" id="quantity" />
+                  <input type="number" name="quantity" id="quantity" min="1" defaultValue="1" />
                 </div>
                 <div className="specs">
                   <h1>{t("single.specifications")}</h1>

@@ -83,9 +83,57 @@ app.get("/data", (req, res) => {
   });
 });
 
-app.get("/get_cart_items", (req, res) => {
-  console.log(localStorage.cart);
-  res.send(localStorage.cart);
+// Get or create cart for session/user
+const getOrCreateCart = (req) => {
+  return new Promise((resolve, reject) => {
+    const sessionId = req.sessionID;
+    const userId = req.session.userId || null;
+
+    // Try to find existing cart
+    const query = userId 
+      ? 'SELECT * FROM carts WHERE user_id = ? ORDER BY id DESC LIMIT 1'
+      : 'SELECT * FROM carts WHERE session_id = ? ORDER BY id DESC LIMIT 1';
+    const params = userId ? [userId] : [sessionId];
+
+    con.query(query, params, (err, results) => {
+      if (err) return reject(err);
+
+      if (results.length > 0) {
+        resolve(results[0]);
+      } else {
+        // Create new cart
+        const insertQuery = 'INSERT INTO carts (user_id, session_id) VALUES (?, ?)';
+        con.query(insertQuery, [userId, sessionId], (err, result) => {
+          if (err) return reject(err);
+          resolve({ id: result.insertId, user_id: userId, session_id: sessionId });
+        });
+      }
+    });
+  });
+};
+
+app.get("/get_cart_items", async (req, res) => {
+  try {
+    const cart = await getOrCreateCart(req);
+    
+    const query = `
+      SELECT ci.*, p.name, p.description, p.image, p.price, p.sale_price, p.quantity as stock
+      FROM cart_items ci
+      JOIN products p ON ci.product_id = p.id
+      WHERE ci.cart_id = ?
+    `;
+    
+    con.query(query, [cart.id], (err, results) => {
+      if (err) {
+        console.error("Error fetching cart items:", err);
+        return res.status(500).json({ error: "Failed to fetch cart items" });
+      }
+      res.json(results);
+    });
+  } catch (error) {
+    console.error("Error in get_cart_items:", error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 app.post("/new_item", (req, res) => {
@@ -166,19 +214,94 @@ app.post("/update", async (req, res) => {
     }
 });
 
-// Access the session as req.session
-app.post("/add_item_to_cart", function (req, res) {
-  // sessionStorage.setItem('cart', JSON.stringify(req.body))
-  // console.log(sessionStorage.getItem('cart'));
-  if (localStorage.cart) {
-    // console.log(sessionStorage.cart);
-    localStorage.cart.push(JSON.stringify(req.body));
-  } else {
-    localStorage.cart = [JSON.stringify(req.body)];
-    // console.log(sessionStorage.cart);
+// Add item to cart
+app.post("/add_item_to_cart", async (req, res) => {
+  try {
+    const { product_id, quantity } = req.body;
+    
+    if (!product_id || !quantity) {
+      return res.status(400).json({ error: "product_id and quantity are required" });
+    }
+
+    const cart = await getOrCreateCart(req);
+
+    // Check if item already exists in cart
+    const checkQuery = 'SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?';
+    con.query(checkQuery, [cart.id, product_id], (err, results) => {
+      if (err) {
+        console.error("Error checking cart item:", err);
+        return res.status(500).json({ error: "Failed to check cart item" });
+      }
+
+      if (results.length > 0) {
+        // Update quantity if item exists
+        const updateQuery = 'UPDATE cart_items SET quantity = quantity + ? WHERE id = ?';
+        con.query(updateQuery, [quantity, results[0].id], (err) => {
+          if (err) {
+            console.error("Error updating cart item:", err);
+            return res.status(500).json({ error: "Failed to update cart item" });
+          }
+          res.json({ success: true, message: "Cart item updated" });
+        });
+      } else {
+        // Insert new item if it doesn't exist
+        const insertQuery = 'INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)';
+        con.query(insertQuery, [cart.id, product_id, quantity], (err) => {
+          if (err) {
+            console.error("Error adding cart item:", err);
+            return res.status(500).json({ error: "Failed to add cart item" });
+          }
+          res.json({ success: true, message: "Item added to cart" });
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Error in add_item_to_cart:", error);
+    res.status(500).json({ error: "Server error" });
   }
-  console.log(localStorage.cart);
-  res.end("req.session.cart");
+});
+
+// Remove item from cart
+app.delete("/remove_cart_item/:id", async (req, res) => {
+  try {
+    const cartItemId = req.params.id;
+    const query = 'DELETE FROM cart_items WHERE id = ?';
+    
+    con.query(query, [cartItemId], (err, result) => {
+      if (err) {
+        console.error("Error removing cart item:", err);
+        return res.status(500).json({ error: "Failed to remove cart item" });
+      }
+      res.json({ success: true, message: "Item removed from cart" });
+    });
+  } catch (error) {
+    console.error("Error in remove_cart_item:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Update cart item quantity
+app.put("/update_cart_item/:id", async (req, res) => {
+  try {
+    const cartItemId = req.params.id;
+    const { quantity } = req.body;
+    
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ error: "Valid quantity is required" });
+    }
+
+    const query = 'UPDATE cart_items SET quantity = ? WHERE id = ?';
+    con.query(query, [quantity, cartItemId], (err, result) => {
+      if (err) {
+        console.error("Error updating cart item quantity:", err);
+        return res.status(500).json({ error: "Failed to update cart item quantity" });
+      }
+      res.json({ success: true, message: "Cart item quantity updated" });
+    });
+  } catch (error) {
+    console.error("Error in update_cart_item:", error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // Dynamic Sitemap for SEO
